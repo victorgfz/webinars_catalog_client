@@ -82,7 +82,7 @@ export default function WebinarPage() {
 
                     <div className="flex items-center justify-center gap-2">
                         <Languages size={16} className="opacity-75" />
-                        <p className="text-md font-light">{webinar?.language && formatLanguage(webinar.language)}</p>
+                        <p className="text-md font-light capitalize">{webinar?.language && formatLanguage(webinar.language)}</p>
                     </div>
 
 

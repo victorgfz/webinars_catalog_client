@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState, Dispatch, SetStateAction } from "react"
 import { WebinarListItem } from "../shared/WebinarListItem"
 import api from "@/services/api"
 
@@ -15,32 +15,57 @@ type Webinar = {
     userEnrolled: boolean
 }
 
-export const WebinarList = ({ dashboard }: { dashboard: boolean }) => {
+
+
+export const WebinarList = ({ dashboard, filter, search, doSearch, setDoSearch }: { dashboard: boolean, filter: string | null, search: string, doSearch: string, setDoSearch: Dispatch<SetStateAction<string>> }) => {
 
 
     const [webinarList, setWebinarList] = useState<Webinar[] | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
+    const [endpoint, setEndpoint] = useState("/webinar")
 
+    const memoizedFilter = useMemo(() => {
+        return filter ?? null
+    }, [filter])
 
+    const memoizedSearch = useMemo(() => {
+        return doSearch ?? null
+    }, [doSearch])
+
+    /*    useEffect(() => {
+           
+   
+           setEndpoint(url)
+       }, )
+   
+    */
     useEffect(() => {
         const getWebinarList = async () => {
             setLoading(true)
             try {
-                const endpoint = dashboard ? "/webinar?userEnrolled=true" : "/webinar"
+                let endpoint = "/webinar"
+
+                if (dashboard) {
+                    endpoint += "?userEnrolled=true"
+                } else if (memoizedFilter && doSearch) {
+                    endpoint += "?" + memoizedFilter + "&search=" + memoizedSearch
+                } else if (memoizedFilter && !doSearch) {
+                    endpoint += "?" + memoizedFilter
+                } else if (!memoizedFilter && doSearch) {
+                    endpoint += "?search=" + memoizedSearch
+                }
                 const res = await api.get(endpoint)
-
+                console.log(endpoint)
                 setWebinarList(res.data)
-
             } catch (error) {
                 setWebinarList(null)
-
             } finally {
                 setLoading(false)
             }
         }
         getWebinarList()
 
-    }, [dashboard])
+    }, [dashboard, memoizedFilter, memoizedSearch, doSearch])
 
     if (loading) return <div>Loading...</div>
 

@@ -1,44 +1,69 @@
 "use client"
 
+import api from "@/services/api"
 import { DropdownFilter } from "../shared/DropdownFilter"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { SearchBar } from "../shared/SearchBar"
+
+
+type Filter = {
+    type: string,
+    items: string[]
+}
 
 type selectedFilters = {
     type: string,
-    id: number,
     description: string
 }
 
 type filterBarProps = {
-    selectedFilters: selectedFilters[] | null;
-    setSelectedFilters: Dispatch<SetStateAction<selectedFilters[] | null>>;
+    selectedFilters: selectedFilters[] | null,
+    setSelectedFilters: Dispatch<SetStateAction<selectedFilters[] | null>>,
+    search: string,
+    setSearch: Dispatch<SetStateAction<string>>,
+    doSearch: string,
+    setDoSearch: Dispatch<SetStateAction<string>>,
 };
 
-export const FilterBar = ({ selectedFilters, setSelectedFilters }: filterBarProps) => {
+export const FilterBar = ({ selectedFilters, setSelectedFilters, search, setSearch, doSearch, setDoSearch }: filterBarProps) => {
 
-    const filters = [
-        {
-            type: "categories",
-            items: [{ id: 1, description: "Marketing" }, { id: 2, description: "AI" }, { id: 3, description: "Software" },]
-        },
-        {
-            type: "speakers",
-            items: [{ id: 1, description: "Teste" }, { id: 2, description: "Teste2" }, { id: 3, description: "AAAA" },]
-        },
-    ]
+    const [loading, setLoading] = useState<boolean>(true)
+    const [filters, setFilters] = useState<Filter[] | null>(null)
 
+    useEffect(() => {
+        const getFilters = async () => {
+            setLoading(true)
+            try {
+                const res = await api.get("/filter")
+                setFilters(res.data)
+            } catch (error) {
+                setFilters(null)
+            } finally {
+                setLoading(false)
+            }
+        }
+        getFilters()
+    }, [])
+
+    if (loading) return <div>Loading...</div>
 
     return (<div className="w-full  mb-4">
-        <div className="flex items-center justify-start gap-4">
-            <DropdownFilter title="Filter by" filters={filters} setSelectedFilters={setSelectedFilters} selectedFilters={selectedFilters} />
-            <button>Apply filters</button>
+        <div className="flex items-center justify-center gap-4">
+            <DropdownFilter title="Filter by" filters={filters ? filters : []} setSelectedFilters={setSelectedFilters} selectedFilters={selectedFilters} />
+            <SearchBar search={search} setSearch={setSearch} doSearch={doSearch} setDoSearch={setDoSearch} />
+
         </div>
-        <div className="flex gap-2">
-            {selectedFilters && selectedFilters.length > 0 ? selectedFilters.map(item =>
-                <div key={`${item.type}-${item.id}`} className="flex items-center justify-center rounded-full bg-gray-200 py-2 px-4">
-                    <p className="text-sm font-light">{item.description}</p>
+        <div className="flex gap-2 mt-2">
+            {selectedFilters && selectedFilters.length > 0 ? selectedFilters.map(item => {
+                let bgColor
+                if (item.type === "speakers") bgColor = "bg-amber-100"
+                else if (item.type === "categories") bgColor = "bg-purple-100"
+                else bgColor = "bg-orange-100"
+                return (<div key={`${item.type}-${item.description}`} className={`flex items-center justify-center rounded-full py-2 px-4 ${bgColor}`}>
+                    <p className="text-sm font-light capitalize">{item.description}</p>
 
                 </div>)
+            })
 
                 : null}
         </div>

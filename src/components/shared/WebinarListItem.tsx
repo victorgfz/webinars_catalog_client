@@ -48,7 +48,7 @@ export const WebinarListItem = ({ id, title, summary, speakers, categories, date
 
             <div className="px-4 py-2 rounded-full bg-gray-200 flex items-center justify-center gap-2">
                 <Languages size={16} className="opacity-75" />
-                <p className="text-sm font-light">{formatLanguage(language)}</p>
+                <p className="text-sm font-light capitalize">{formatLanguage(language)}</p>
             </div>
 
             {userEnrolled && <div className="px-4 py-2 rounded-full bg-green-200 flex items-center justify-center gap-2 md:ml-auto">
