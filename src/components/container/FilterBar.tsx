@@ -4,8 +4,6 @@ import api from "@/services/api"
 import { DropdownFilter } from "../shared/DropdownFilter"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { SearchBar } from "../shared/SearchBar"
-import { Error } from "../shared/Error"
-import { handleApiError } from "@/utils/handleApiError"
 import { Skeleton } from "../ui/skeleton"
 
 
