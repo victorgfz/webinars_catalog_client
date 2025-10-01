@@ -20,7 +20,7 @@ type Webinar = {
 
 
 
-export const WebinarList = ({ dashboard, filter, doSearch }: { dashboard: boolean, filter: string | null, doSearch: string, }) => {
+export const WebinarList = ({ dashboard, filter, doSearch }: { dashboard: boolean, filter: string | null, doSearch: string | null, }) => {
 
 
     const [webinarList, setWebinarList] = useState<Webinar[] | null>(null)
