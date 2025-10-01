@@ -10,6 +10,7 @@ import api from "@/services/api";
 import { toast } from "sonner"
 import { handleApiError } from "@/utils/handleApiError";
 import { useRouter } from 'next/navigation'
+import { ArrowRight } from "lucide-react";
 
 const loginSchema = z.object({
     email: z.email({ message: "Make sure you enter a valid email!" }),
@@ -54,7 +55,8 @@ export default function Login() {
             <Input error={errors.password?.message} register={register("password")} type="password" label="Password" id="password" />
             <Button title="Login" type="submit" />
         </form>
-        <Link className="font-light text-sm hover:underline text-center mx-auto" href="/auth/register">Not registered yet?
+        <Link className="font-light text-sm hover:underline text-center mx-auto mb-8" href="/auth/register">Not registered yet?
             <span className="text-blue-600"> Create an account</span> </Link>
+        <Link className="font-light text-sm hover:underline text-center mx-auto flex justify-start items-center gap-1" href="/add-webinar">Add webinars page <ArrowRight size={12} /> </Link>
     </div>)
 }

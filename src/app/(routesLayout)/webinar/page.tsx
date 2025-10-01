@@ -18,7 +18,7 @@ export default function Webinar() {
     const [doSearch, setDoSearch] = useState<string>("")
     return (<div
         className="w-full p-4">
-        <FilterBar selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} search={search} setSearch={setSearch} doSearch={doSearch} setDoSearch={setDoSearch} />
+        <FilterBar selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} search={search} setSearch={setSearch} setDoSearch={setDoSearch} />
         <WebinarList dashboard={false} filter={convertSelectedFiltersToQuery(selectedFilters)} doSearch={doSearch} />
     </div>)
 }
