@@ -1,7 +1,7 @@
 'use client'
 
 import api from "@/services/api"
-
+import Cookies from 'js-cookie'
 import { LogOut, User } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from 'next/navigation'
@@ -55,8 +55,24 @@ export const Header = () => {
 
     const handleLogout = async () => {
 
-        const res = await api.post("/auth/logout")
-        if (res.data.ok) router.push("/auth/login")
+        try {
+            await api.post('/auth/logout')
+
+
+            localStorage.removeItem('token')
+
+
+            Cookies.remove('authToken')
+
+
+            router.push('/auth/login')
+        } catch (error) {
+            console.log(error)
+            localStorage.removeItem('token')
+            Cookies.remove('authToken')
+            router.push('/auth/login')
+        }
+
     }
 
     if (loading) return <header className="px-4 py-2 w-full"><Skeleton className="rounded-md w-full h-10" /></header>
