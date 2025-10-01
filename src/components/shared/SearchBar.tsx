@@ -8,11 +8,10 @@ import { Dispatch, SetStateAction } from "react"
 type searchBarProps = {
     search: string,
     setSearch: Dispatch<SetStateAction<string>>,
-    doSearch: string,
     setDoSearch: Dispatch<SetStateAction<string>>,
 }
 
-export const SearchBar = ({ search, setSearch, doSearch, setDoSearch }: searchBarProps) => {
+export const SearchBar = ({ search, setSearch, setDoSearch }: searchBarProps) => {
 
 
 

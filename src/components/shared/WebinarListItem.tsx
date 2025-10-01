@@ -43,7 +43,7 @@ export const WebinarListItem = ({ id, title, summary, speakers, categories, date
 
             <div className="px-4 py-2 rounded-full bg-gray-200 flex items-center justify-center gap-2">
                 <Timer size={16} className="opacity-75" />
-                <p className="text-sm font-light">{duration / 60} {duration / 60 == 1 ? "hour" : "hours"}</p>
+                <p className="text-sm font-light">{Math.floor(duration / 60)} {duration / 60 < 2 ? "hour" : "hours"}</p>
             </div>
 
             <div className="px-4 py-2 rounded-full bg-gray-200 flex items-center justify-center gap-2">

@@ -1,6 +1,10 @@
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner"
 
+export const metadata = {
+  title: 'Webinars Catalog - Technical Case',
+  icons: '/favicon.png',
+}
 
 export default function RootLayout({
   children,

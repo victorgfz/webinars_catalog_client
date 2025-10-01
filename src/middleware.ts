@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server'
 
 
-const publicRoutes = [{ path: "/auth/login" }, { path: "/auth/register" }]
+const publicRoutes = [{ path: "/auth/login" }, { path: "/auth/register" }, { path: "/add-webinar" }]
 
 
 export function middleware(request: NextRequest) {

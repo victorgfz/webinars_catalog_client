@@ -1,9 +1,12 @@
 "use client"
 import { AlreadyEnrolled } from '@/components/container/AlreadyEnrolled'
 import { EnrollmentForm } from '@/components/container/EnrollmentForm'
+import { Error } from '@/components/shared/Error'
+import { Skeleton } from '@/components/ui/skeleton'
 import api from '@/services/api'
 import { formatDate } from '@/utils/formatDate'
 import { formatLanguage } from '@/utils/formatLanguage'
+import { handleApiError } from '@/utils/handleApiError'
 import { Calendar, Languages, Timer } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -27,16 +30,18 @@ export default function WebinarPage() {
     const [webinar, setWebinar] = useState<Webinar | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
     const [reload, setReload] = useState<boolean>(false)
-
+    const [errorState, setErrorState] = useState<unknown>(null)
 
     useEffect(() => {
         const getWebinar = async () => {
             setLoading(true)
+            setErrorState(null)
             try {
                 const res = await api.get(`/webinar/${params.id}`)
                 setWebinar(res.data)
             } catch (error) {
-
+                setWebinar(null)
+                setErrorState(error)
             } finally {
                 setLoading(false)
             }
@@ -46,9 +51,14 @@ export default function WebinarPage() {
 
 
 
-    if (loading) return <div>Loading...</div>
+    if (loading) return (<div className='w-full px-4 py-8'>
+        <Skeleton className='rounded-md w-full h-50 mb-4' />
+        <Skeleton className='rounded-md w-full h-20 mb-4' />
+        <Skeleton className='rounded-md w-full h-20 mb-4' />
+        <Skeleton className='rounded-md w-full h-50 ' />
+    </div>)
 
-    console.log(webinar)
+    if (errorState) return <Error message={handleApiError.message(errorState)} action={true} whatToDo={handleApiError.action(errorState)} />
 
     return (<div className="w-full px-4 py-8">
         <div className='py-8'>
@@ -77,7 +87,7 @@ export default function WebinarPage() {
 
                     <div className="flex items-center justify-center gap-2">
                         <Timer size={16} className="opacity-75" />
-                        <p className="text-md font-light">{webinar?.duration && webinar.duration / 60} {webinar?.duration && webinar.duration / 60 == 1 ? "hour" : "hours"}</p>
+                        <p className="text-md font-light">{webinar?.duration && Math.floor(webinar.duration / 60)} {webinar?.duration && webinar.duration / 60 < 2 ? "hour" : "hours"}</p>
                     </div>
 
                     <div className="flex items-center justify-center gap-2">
